@@ -1,0 +1,5 @@
+name=<Pans Genie Build>
+url=<https://archive.org/download/PansgenieBuild/PanGenie.zip>
+img=<https://lpsmythologywiki.wikispaces.com/file/view/pandoras-box.jpg/271079416/pandoras-box.jpg>
+fanart=<http://dailyguideafrica.com/wp-content/uploads/2015/11/PANDORAS-BOX.jpg>
+description=<Pandoras Genie Build>
