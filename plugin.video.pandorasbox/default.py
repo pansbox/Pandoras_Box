@@ -88,11 +88,45 @@ def Pandora_Menu(url):
             Watched = re.compile('url="(.+?)"\n').findall(str(watched_read))
             for item in Watched:
                 if item == url:
-                    name =('[COLORblue][I]Watched - [/I][/COLOR]'+name).replace('[COLORblue][I]Watched - [/I][/COLOR][COLORblue][I]Watched - [/I][/COLOR]','[COLORred][I]Watched - [/I][/COLOR]')
-            addDirPand(name,url,401,iconimage,background,desc,'')
+                    name =('[COLORblue]*[/COLOR]'+name).replace('[COLORblue]*[/COLOR][COLORblue]*[/COLOR]','[COLORred]*[/COLOR]')
+            if not 'http' in url:
+                if 'list' in url:
+                    addDirPand2(name,url,13,iconimage,background,desc,'')
+                else:
+                    url = 'plugin://plugin.video.youtube/play/?video_id='+ url
+                    addDirPand(name,url,401,iconimage,background,desc,'')
+            else:
+                addDirPand(name,url,401,iconimage,background,desc,'')
             xbmcplugin.setContent(addon_handle, 'movies')			
             xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_TITLE);	
 
+def Youtube_Playlist(url):			
+    url = 'https://www.youtube.com/playlist?'+url
+    xbmc.log('###################################'+url)
+    HTML = OPEN_URL(url)
+    block_set = re.compile('<tr class="pl-video yt-uix-tile(.+?)</tr>',re.DOTALL).findall(HTML)
+    for block in block_set:
+        image = re.compile('data-thumb="(.+?)"').findall(str(block))
+        for image in image:
+            image = image
+        name = re.compile('data-title="(.+?)"').findall(str(block))
+        for name in name:
+        	name = (name).replace('&quot;','').replace('&#39;','\'').replace('&amp;','&')
+        duration = re.compile('<div class="timestamp"><span aria-label=".+?">(.+?)</span>').findall(str(block))
+        for duration in duration:
+            duration = duration
+        url = re.compile('data-video-ids="(.+?)"').findall(str(block))
+        for url in url:
+            url = url
+        if 'elete' in name:
+            pass
+        elif 'rivate vid' in name:
+            pass
+        else:
+            addDirPand('[COLORred]'+str(duration)+'[/COLOR] : '+str(name),'plugin://plugin.video.youtube/play/?video_id='+str(url),401,str(image),'','','' )
+
+                    
+			
 def Search_Pandoras_Films():
     
     Search_Name = Dialog.input('Search', type=xbmcgui.INPUT_ALPHANUM) # what you type in
@@ -108,9 +142,15 @@ def Search_Pandoras_Films():
                     Watched = re.compile('url="(.+?)"\n').findall(str(watched_read))
                     for item in Watched:
                         if item == url:
-                            name = '[COLORblue][I]Watched - [/I][/COLOR]'+name
-                    addDirPand(name,url,401,iconimage,fanart,desc,'')
-					
+                            name = '[COLORblue]*[/COLOR]'+name
+                    if not 'http' in url:
+                        if 'list' in url:
+                            addDirPand2(name,url,13,iconimage,background,desc,'')
+                        else:
+                            url = 'plugin://plugin.video.youtube/play/?video_id='+ url
+                            addDirPand(name,url,401,iconimage,background,desc,'')
+                    else:
+                        addDirPand(name,url,401,iconimage,background,desc,'')
                     xbmcplugin.setContent(addon_handle, 'movies')
                     xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_TITLE);	
 				
@@ -131,9 +171,15 @@ def Search_Pandoras_TV():
                     Watched = re.compile('url="(.+?)"\n').findall(str(watched_read))
                     for item in Watched:
                         if item == url:
-                            name =('[COLORblue][B]Watched - [/I][/COLOR]'+name).replace('[COLORblue][I]Watched - [/I][/COLOR][COLORblue][I]Watched - [/I][/COLOR]','[COLORred][I]Watched - [/I][/COLOR]')
-                    
-                    addDirPand2(name,url,mode,img,fanart,desc,'')
+                            name =('[COLORblue]*[/COLOR]'+name).replace('[COLORblue]*[/COLOR][COLORblue]*[/COLOR]','[COLORred]*[/COLOR]')
+                    if not 'http' in url:
+                        if 'list' in url:
+                            addDirPand2(name,url,13,iconimage,background,desc,'')
+                        else:
+                            url = 'plugin://plugin.video.youtube/play/?video_id='+ url
+                            addDirPand(name,url,401,iconimage,background,desc,'')
+                    else:
+                        addDirPand2(name,url,mode,img,fanart,desc,'')
 					
                     xbmcplugin.setContent(addon_handle, 'movies')
                     xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_TITLE);	
@@ -147,7 +193,7 @@ def open_Menu(url):
         Watched = re.compile('url="(.+?)"\n').findall(str(watched_read))
         for item in Watched:
             if item == url:
-                name =('[COLORblue][B]Watched - [/I][/COLOR]'+name).replace('[COLORblue][I]Watched - [/I][/COLOR][COLORblue][I]Watched - [/I][/COLOR]','[COLORred][I]Watched - [/I][/COLOR]')
+                name =('[COLORblue]*[/COLOR]'+name).replace('[COLORblue]*[/COLOR][COLORblue]*[/COLOR]','[COLORred]*[/COLOR]')
         addDirPand2(name,url,mode,img,fanart,desc,'')
 
         xbmcplugin.setContent(addon_handle, 'movies')
@@ -351,6 +397,7 @@ elif mode == 1 		: Search_Menu()
 elif mode == 10 	: Resolve_Dizi(url)
 elif mode == 11		: Write_Favourite(name,url,fav_mode,iconimage,fanart,description)
 elif mode == 12 	: Read_Favourite()
+elif mode == 13 	: Youtube_Playlist(url)
 elif mode == 400 	: Pandoras_Box()
 elif mode == 401    : Resolve(url)
 elif mode == 423 	: open_Menu(url)
