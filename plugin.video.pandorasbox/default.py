@@ -150,7 +150,7 @@ def Search_Pandoras_Films():
                             url = 'plugin://plugin.video.youtube/play/?video_id='+ url
                             addDirPand(name,url,401,iconimage,background,desc,'')
                     else:
-                        addDirPand(name,url,401,iconimage,background,desc,'')
+                        addDirPand(name,url,401,iconimage,'',desc,'')
                     xbmcplugin.setContent(addon_handle, 'movies')
                     xbmcplugin.addSortMethod(addon_handle, xbmcplugin.SORT_METHOD_TITLE);	
 				
@@ -325,16 +325,6 @@ print "URL: "+str(url)
 print "Name: "+str(name)
 print "IconImage: "+str(iconimage)
 
-def GetPlayerCore(): 
-    try: 
-        PlayerMethod=getSet("core-player") 
-        if   (PlayerMethod=='DVDPLAYER'): PlayerMeth=xbmc.PLAYER_CORE_DVDPLAYER 
-        elif (PlayerMethod=='MPLAYER'): PlayerMeth=xbmc.PLAYER_CORE_MPLAYER 
-        elif (PlayerMethod=='PAPLAYER'): PlayerMeth=xbmc.PLAYER_CORE_PAPLAYER 
-        else: PlayerMeth=xbmc.PLAYER_CORE_AUTO 
-    except: PlayerMeth=xbmc.PLAYER_CORE_AUTO 
-    return PlayerMeth 
-    return True 
  
 def Resolve_Dizi(url):
     play=xbmc.Player(GetPlayerCore())
@@ -348,14 +338,14 @@ def Resolve(url):
     print_text_file = open(watched,"a")
     print_text_file.write('url="'+url+'"\n')
     print_text_file.close
-    play=xbmc.Player(GetPlayerCore())
+    play=xbmc.Player()
     import urlresolver
     try: play.play(url)
     except: pass
     from urlresolver import common
     dp = xbmcgui.DialogProgress()
     dp.create('LOADING','Opening %s Now'%(name))
-    play=xbmc.Player(GetPlayerCore())
+    play=xbmc.Player()
     url=urlresolver.HostedMediaFile(url).resolve() 
     if dp.iscanceled(): 
         print "[COLORblue]STREAM CANCELLED[/COLOR]" # need to get this part working    
